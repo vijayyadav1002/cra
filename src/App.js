@@ -1,23 +1,31 @@
-import logo from './logo.svg';
 import './App.css';
+import { useState, useEffect } from 'react';
 
 function App() {
+  const [todos, setTodos] = useState([]);
+  useEffect(() => {
+    const callApi = async () => {
+      const response = await fetch(
+        'https://jsonplaceholder.typicode.com/todos'
+      );
+      const json = await response.json();
+      setTodos(json.slice(0, 10));
+    };
+    callApi().catch(console.error);
+  }, []);
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>Hello Den!</h1>
+      <p role="paragraph">Start editing to see some magic happen :)</p>
+      <ul>
+        {todos.map(function (todo, index) {
+          return (
+            <li key={index}>
+              <input type='checkbox' checked={todo.completed}/>{todo.title}
+            </li>
+          );
+        })}
+      </ul>
     </div>
   );
 }
